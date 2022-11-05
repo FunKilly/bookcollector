@@ -1,7 +1,14 @@
 CONTAINER ?= "panel-api"
 
+# run
+run:
+	docker-compose up
 
-# another
+# build
+build:
+	docker-compose build
+
+# lint
 lint:
 	black --line-length=90 . && isort . && flake8 --max-line-length=120
 

@@ -1,29 +1,27 @@
 # syntax = docker/dockerfile:experimental
-FROM python:3.8.2-slim AS base
-RUN groupadd -g 3000 -r app \
-    && useradd -u 3000 -r -g app -s /usr/sbin/nologin app \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
-    ca-certificates=20200601~deb10u2 \
-    curl=7.64.0-4+deb10u2 \
+FROM python:3.10.6-slim-buster AS base
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends  \
+    ca-certificates \
+    curl \
     && rm -rf /var/lib/apt/lists/*
-WORKDIR /home/src
-RUN chown -R app:app /home/src
+WORKDIR /home/testfastapi
 ENV PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_NO_CACHE_DIR=off \
     POETRY_VIRTUALENVS_IN_PROJECT=true \
-    POETRY_VERSION=1.1.3 \
-    PATH="/home/src/.poetry/bin:/home/src/.venv/bin:${PATH}" \
+    POETRY_VERSION=1.1.15 \
+    PATH="/home/testfastapi/.poetry/bin:/home/testfastapi/.venv/bin:${PATH}" \
     VIRTUAL_ENV="/home/src/.venv"
-RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/home/src/.poetry python3 -
-ENV PATH="${PATH}:/src/.poetry/bin"
-COPY --chown=app:app pyproject.toml poetry.lock ./
-RUN poetry install -v\
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+ENV PATH="${PATH}:/root/.poetry/bin"
+COPY pyproject.toml .
+COPY poetry.lock .
+RUN poetry config virtualenvs.create false  && poetry install --no-interaction --no-ansi\
     && poetry run pip install --upgrade pip==21.1.1
-COPY --chown=app:app pyproject.toml ./
-COPY --chown=app:app tests/ tests/
-COPY --chown=app:app src/ src/
-EXPOSE 8000
+COPY tests/ tests/
+COPY src/ src/
+WORKDIR /home/testfastapi/src
+CMD ["uvicorn", "portal.endpoints.routes:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
