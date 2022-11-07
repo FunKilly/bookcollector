@@ -3,7 +3,7 @@ from typing import Callable, Dict, Type
 
 from portal.domain import commands
 
-from . import uow
+from . import unit_of_work as uow
 
 logger = logging.getLogger(__name__)
 

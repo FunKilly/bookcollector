@@ -1,7 +1,8 @@
 import inspect
 
 from portal.adapters import mapping
-from portal.services import command_bus, handlers, uow
+from portal.services import command_bus, handlers
+from portal.services import unit_of_work as uow
 
 
 def bootstrap(

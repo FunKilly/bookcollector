@@ -16,7 +16,7 @@ class CreateBookRequest(BaseModel):
     def isbn_must_starts_with_isbn_prefix(cls, v):
         if not v.startswith("ISBN"):
             raise ValueError("ISBN have incorrect format")
-        return v.title()
+        return v
 
 
 class CreateRateRequest(BaseModel):
@@ -24,6 +24,7 @@ class CreateRateRequest(BaseModel):
 
 
 class Category(BaseModel):
+    id: int
     name: str
 
 

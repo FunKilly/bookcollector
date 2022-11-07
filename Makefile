@@ -18,7 +18,7 @@ bash:
 
 # Enter to db
 shell:
-	docker exec -it api-db bash -c "psql -U oskar"
+	docker exec -it api-db bash -c "psql -U oskar -d rating_portal"
 
 # Apply migrations
 migrate:

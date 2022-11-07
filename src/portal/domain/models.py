@@ -1,4 +1,5 @@
 import datetime
+from statistics import mean
 from typing import Optional
 
 
@@ -24,11 +25,25 @@ class Book:
         self.release_date = release_date
         self.isbn = isbn
         self.ratings = []
+        self.category = None
 
-    def convert_into_dict(self):
-        return {
+    def convert_into_dict(self) -> dict:
+        model_as_dict = {
             key: value for key, value in vars(self).items() if not key.startswith("_")
         }
+        if self.ratings:
+            model_as_dict["average_rate"] = self._get_average_rate()
+
+        if self.category:
+            model_as_dict["category"] = {
+                "id": self.category.id,
+                "name": self.category.name,
+            }
+
+        return model_as_dict
+
+    def _get_average_rate(self) -> float:
+        return mean([rating.rate for rating in self.ratings])
 
 
 class Rating:

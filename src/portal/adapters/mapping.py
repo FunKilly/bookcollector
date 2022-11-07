@@ -18,7 +18,7 @@ books = Table(
     Column("title", String(255), nullable=False),
     Column("author", String(150), nullable=False),
     Column("publisher", String(150), nullable=False),
-    Column("category", ForeignKey("categories.id")),
+    Column("category_id", ForeignKey("categories.id")),
     Column("release_date", Date),
     Column("isbn", String(40)),
 )
@@ -45,7 +45,13 @@ def start_mappers():
         models.Rating,
         ratings,
     )
-    books_mapper = mapper(
-        models.Book, books, properties={"ratings": relationship(ratings_mapper)}
+    category_mapper = mapper(models.Category, categories)
+
+    mapper(
+        models.Book,
+        books,
+        properties={
+            "ratings": relationship(ratings_mapper),
+            "category": relationship(category_mapper),
+        },
     )
-    mapper(models.Category, categories, properties={"books": relationship(books_mapper)})

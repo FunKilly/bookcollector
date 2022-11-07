@@ -1,6 +1,6 @@
 from portal.domain.commands import AddBook, AddRate, GetBook, ListBooks
 from portal.domain.models import Book, Rating
-from portal.services.uow import SqlAlchemyUnitOfWork
+from portal.services.unit_of_work import SqlAlchemyUnitOfWork
 from portal.utils.exceptions import BookAlreadyExists, BookNotFound
 
 
@@ -8,16 +8,15 @@ def add_book(cmd: AddBook, uow: SqlAlchemyUnitOfWork):
     with uow:
         if uow.books.get_by_isbn(cmd.isbn):
             raise BookAlreadyExists
-        uow.books.add(
-            Book(
-                title=cmd.title,
-                author=cmd.author,
-                publisher=cmd.publisher,
-                category_id=cmd.category_id,
-                release_date=cmd.release_date,
-                isbn=cmd.isbn,
-            )
+        book = Book(
+            title=cmd.title,
+            author=cmd.author,
+            publisher=cmd.publisher,
+            category_id=cmd.category_id,
+            release_date=cmd.release_date,
+            isbn=cmd.isbn,
         )
+        uow.books.add(book)
         uow.commit()
 
 

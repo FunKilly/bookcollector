@@ -2,10 +2,6 @@ from fastapi import status
 
 
 class PortalBaseException(Exception):
-    """
-    Base exception class for the Blueprint. All Blueprint exceptions must subclass this one.
-    """
-
     status_code: status = status.HTTP_400_BAD_REQUEST
     message: str = None
     field: str = None
@@ -24,7 +20,6 @@ class PortalBaseException(Exception):
             self.field = field
 
     def __str__(self):
-        """Method overridden to keep the attributes' values in Sentry"""
         data = {
             "field": self.field,
             "message": self.message,
@@ -39,4 +34,4 @@ class BookAlreadyExists(PortalBaseException):
 
 
 class BookNotFound(PortalBaseException):
-    message = "Book not fouhnd."
+    message = "Book not found."
