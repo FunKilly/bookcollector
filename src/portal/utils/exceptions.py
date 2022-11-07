@@ -1,24 +1,42 @@
 from fastapi import status
-from fastapi.exceptions import RequestValidationError
 
 
-class BaseException(RequestValidationError):
-    def __init__(self, message="", errors=None):
-        """
-        Arguments called in the caller code have precedence over pre-configured messages and codes.
-        """
+class PortalBaseException(Exception):
+    """
+    Base exception class for the Blueprint. All Blueprint exceptions must subclass this one.
+    """
+
+    status_code: status = status.HTTP_400_BAD_REQUEST
+    message: str = None
+    field: str = None
+
+    def __init__(
+        self,
+        status_code: status = None,
+        message: str = None,
+        field: str = None,
+    ):
+        if status_code:
+            self.status_code = status_code
         if message:
             self.message = message
-        if errors:
-            self.errors = errors
-        super().__init__(self.message)
+        if field:
+            self.field = field
+
+    def __str__(self):
+        """Method overridden to keep the attributes' values in Sentry"""
+        data = {
+            "field": self.field,
+            "message": self.message,
+            "status_code": self.status_code,
+        }
+        return str(data)
 
 
-class BookNotFound(BaseException):
-    status_code = status.HTTP_404_NOT_FOUND
-    message = "Book not found."
+class BookAlreadyExists(PortalBaseException):
+    message = "Book with provided ISBN already exists."
+    field = "ISBN"
 
 
-class BookAlreadyExists(BaseException):
-    status_code = status.HTTP_400_BAD_REQUEST
-    message = "Book already exists"
+class BookNotFound(PortalBaseException):
+    message = "Book not fouhnd."
