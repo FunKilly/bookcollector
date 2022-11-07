@@ -23,10 +23,15 @@ class Book:
         self.category_id = category_id
         self.release_date = release_date
         self.isbn = isbn
-        self.reviews = []
+        self.ratings = []
+
+    def convert_into_dict(self):
+        return {
+            key: value for key, value in vars(self).items() if not key.startswith("_")
+        }
 
 
 class Rating:
-    def __init(self, rate: int, book_id: str):
+    def __init__(self, rate: int, book_id: str):
         self.rate = rate
         self.book_id = book_id

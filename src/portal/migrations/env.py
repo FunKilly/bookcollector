@@ -11,7 +11,7 @@ from portal.adapters.mapping import metadata
 config = context.config
 
 section = config.config_ini_section
-config.set_section_option(section, "DB_USER", os.environ.get("DB_USER", "allocation"))
+config.set_section_option(section, "DB_USER", os.environ.get("DB_USER", "oskar"))
 config.set_section_option(section, "DB_PASS", os.environ.get("DB_PASS", "abc123"))
 
 

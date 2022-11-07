@@ -15,3 +15,11 @@ lint:
 # Enter the container
 bash:
 	docker exec -it ${CONTAINER} bash
+
+# Enter to db
+shell:
+	docker exec -it api-db bash -c "psql -U oskar"
+
+# Apply migrations
+migrate:
+	docker exec -it ${CONTAINER} bash -c "cd portal && alembic upgrade head"

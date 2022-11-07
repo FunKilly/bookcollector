@@ -10,12 +10,14 @@ logger = logging.getLogger(__name__)
 
 metadata = MetaData()
 
+
 books = Table(
     "books",
     metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
     Column("title", String(255), nullable=False),
     Column("author", String(150), nullable=False),
+    Column("publisher", String(150), nullable=False),
     Column("category", ForeignKey("categories.id")),
     Column("release_date", Date),
     Column("isbn", String(40)),
@@ -33,7 +35,7 @@ ratings = Table(
     "ratings",
     metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
-    Column("rate", String(50), nullable=False),
+    Column("rate", Integer),
     Column("book_id", ForeignKey("books.id")),
 )
 

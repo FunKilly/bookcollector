@@ -25,9 +25,5 @@ class CommandBus:
 
     def handle_command(self, command: commands.Command):
         logger.debug("handling command %s", command)
-        try:
-            handler = self.command_handlers[type(command)]
-            return handler(command)
-        except Exception:
-            logger.exception("Exception handling command %s", command)
-            raise
+        handler = self.command_handlers[type(command)]
+        return handler(command)

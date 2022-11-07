@@ -9,8 +9,9 @@ services:
     ports:
       - "5435:5432"
     environment:
-      - POSTGRES_USER=allocation
+      - POSTGRES_USER=oskar
       - POSTGRES_PASSWORD=abc123
+      - POSTGRES_DB=rating_portal
 
   api:
     container_name: panel-api
@@ -29,6 +30,8 @@ services:
       - DB_HOST=db
       - DB_PASSWORD=abc123
     tty: true
+    command: bash -c "cd portal && alembic upgrade head && cd .. && 
+                      uvicorn portal.endpoints.routes:app --host 0.0.0.0 --port 8000 --reload"
 
 
 volumes:

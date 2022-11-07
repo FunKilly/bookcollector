@@ -24,4 +24,3 @@ RUN poetry config virtualenvs.create false  && poetry install --no-interaction -
 COPY tests/ tests/
 COPY src/ src/
 WORKDIR /home/testfastapi/src
-CMD ["uvicorn", "portal.endpoints.routes:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]

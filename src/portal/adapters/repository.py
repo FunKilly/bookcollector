@@ -15,7 +15,7 @@ class AbstractRepository(abc.ABC):
         return self._get_by_category(category_id)
 
     def get_by_isbn(self, isbn: str) -> Book:
-        return self._get_by_category(isbn)
+        return self._get_by_isbn(isbn)
 
     def get_all(self) -> List[Book]:
         return self._get_all()
@@ -52,11 +52,16 @@ class SqlAlchemyRepository(AbstractRepository):
     def _get(self, book_id):
         return self.session.query(Book).filter_by(id=book_id).first()
 
-    def _get_by_category(self, category_id):
-        return self.session.query(Book).filter_by(Category.id == category_id).all()
+    def _get_by_category(self, category_id: int):
+        return (
+            self.session.query(Book)
+            .join(Category)
+            .filter(Category.id == category_id)
+            .all()
+        )
 
     def _get_by_isbn(self, isbn):
-        return self.session.query(Book).filter_by(isbn == isbn).all()
+        return self.session.query(Book).filter_by(isbn=isbn).all()
 
     def _get_all(self):
         return self.session.query(Book).all()

@@ -8,7 +8,6 @@ def bootstrap(
     start_mapping: bool = True,
     uow: uow.AbstractUnitOfWork = uow.SqlAlchemyUnitOfWork(),
 ) -> command_bus.CommandBus:
-
     if start_mapping:
         mapping.start_mappers()
 

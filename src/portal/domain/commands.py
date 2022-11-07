@@ -10,7 +10,7 @@ class Command:
 @dataclass
 class AddRate(Command):
     book_id: id
-    rate: id
+    rate: int
 
 
 @dataclass
@@ -18,9 +18,9 @@ class AddBook(Command):
     title: str
     author: str
     publisher: str
-    category_id: Optional[id]
-    release_date: Optional[datetime.date]
     isbn: str
+    category_id: Optional[id] = None
+    release_date: Optional[datetime.date] = None
 
 
 @dataclass
