@@ -2,7 +2,7 @@ CONTAINER ?= "panel-api"
 
 # run
 run:
-	docker-compose up
+	docker-compose up --build
 
 # build
 build:
